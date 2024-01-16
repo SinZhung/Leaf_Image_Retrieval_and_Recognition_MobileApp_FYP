@@ -1,5 +1,16 @@
 # Leaf_Image_Retrieval_and_Recognition_MobileApp_FYP
-  This project introduces a Leaf Image Retrieval and Recognition System, featuring a user-friendly mobile application employing visual processing and machine learning for efficient leaf identification, complemented by a web-based admin system to manage a diverse leaf database.
+
+## Overview
+
+This project aims to develop a Leaf Image Retrieval and Recognition System, comprising a mobile application and a web-based system for administrators. The primary objective is to address the challenges faced in leaf identification and retrieval, replacing manual methods with efficient visual processing and machine learning techniques.
+
+## Getting Started
+
+### Prerequisites
+
+- [Visual Studio Code (VSC)](https://code.visualstudio.com/) or any preferred IDE
+- [Python](https://www.python.org/) installed
+- Obtain the correct IP address of the server or device for network requests.
 
 Instructions:
 Check your IP address: Make sure you know the IP address of the server or device where you want to send the network request.
@@ -16,9 +27,9 @@ Starting the server:
 
 
 
-######################
+----------------------
 # Code Readme
-######################
+----------------------
 
 This code snippet can be found in the file SelectedPhotoActivity.java. It is located at line 217.
 
