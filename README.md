@@ -28,7 +28,7 @@ Starting the server:
 
 
 ----------------------
-# Code Readme
+Code Readme
 ----------------------
 
 This code snippet can be found in the file SelectedPhotoActivity.java. It is located at line 217.
