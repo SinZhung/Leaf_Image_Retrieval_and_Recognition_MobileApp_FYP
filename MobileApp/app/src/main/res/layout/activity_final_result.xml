@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_final_result"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/greenbg"
+    tools:context="com.example.leafimageretrievalandrecognitionapplication.FinalResultActivity"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/header" />
+
+    <ImageView
+        android:id="@+id/backIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:contentDescription="Back Icon"
+        android:onClick="onBackIconClick"
+        android:src="@drawable/backicon"
+        tools:ignore="OnClick" />
+
+    <TextView
+        android:id="@+id/LeafApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="60dp"
+        android:gravity="center"
+        android:text="Final Result"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        android:textStyle="normal|bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="1000dp"
+        android:layout_marginTop="165dp" />
+
+    <TextView
+        android:id="@+id/noSimilarImagesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No Similar Images"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:visibility="gone" />
+
+</RelativeLayout>

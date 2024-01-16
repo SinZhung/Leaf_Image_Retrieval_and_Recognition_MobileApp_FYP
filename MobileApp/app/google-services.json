@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "827493466065",
+    "firebase_url": "https://leaf-rr-system-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "leaf-rr-system",
+    "storage_bucket": "leaf-rr-system.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827493466065:android:e014259ed70e8df0a36af0",
+        "android_client_info": {
+          "package_name": "com.example.leafimageretrievalandrecognitionapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827493466065-67h2bgqr9dc84nb7go7lk1k82avmgq71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARF5h9qZxdZS10gQ54X5v9vLuiU206ZCU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827493466065-67h2bgqr9dc84nb7go7lk1k82avmgq71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

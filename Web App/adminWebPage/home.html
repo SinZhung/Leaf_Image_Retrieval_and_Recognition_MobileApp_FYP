@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome To Leaf Image Retrieval and Recognition System</title>
+    <style>
+        * {
+            list-style: none;
+            text-decoration: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+        }
+        
+        #adminEmail {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .wrapper .sidebar {
+            background: rgb(5, 68, 104);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 225px;
+            height: 100%;
+            padding: 20px 0;
+            transition: all 0.5s ease;
+        }
+
+        .wrapper .sidebar .profile {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .wrapper .sidebar .profile p {
+            color: rgb(206, 240, 253);
+            font-size: 14px;
+        }
+
+        .wrapper .sidebar ul li a {
+            display: block;
+            padding: 13px 30px;
+            border-bottom: 1px solid #10558d;
+            color: rgb(241, 237, 237);
+            font-size: 16px;
+            position: relative;
+        }
+
+        .wrapper .sidebar ul li a .icon {
+            color: #dee4ec;
+            width: 30px;
+            display: inline-block;
+        }
+
+        .wrapper .sidebar ul li a:hover,
+        .wrapper .sidebar ul li a.active {
+            color: #0c7db1;
+            background: white;
+            border-right: 2px solid rgb(5, 68, 104);
+        }
+
+        .wrapper .sidebar ul li a:hover .icon,
+        .wrapper .sidebar ul li a.active .icon {
+            color: #0c7db1;
+        }
+
+        .wrapper .sidebar ul li a:hover:before,
+        .wrapper .sidebar ul li a.active:before {
+            display: block;
+        }
+
+        .section {
+            width: calc(100% - 225px);
+            margin-left: 225px;
+            transition: all 0.5s ease;
+        }
+
+        .section .top_navbar {
+            background: rgb(7, 105, 185);
+            height: 50px;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+        }
+
+        .section .top_navbar h1 {
+            color: #f4fbff;
+            font-size: 18px;
+        }
+
+        body {
+            margin: 0;
+            padding-top: 65px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgb(7, 105, 185);
+            padding: 30px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        .gallery-container {
+            margin: 20px auto;
+            padding: 10px;
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        div.gallery {
+            margin: 5px;
+            border: 1px solid #ccc;
+            width: 23%;
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+        }
+
+        div.gallery img {
+            width: 100%;
+            height: auto;
+        }
+
+        div.gallery-desc {
+            margin-top: 5px;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .row {
+            text-align: center;
+            margin-bottom: 20px; /* Add padding below the buttons */
+        }
+
+        .row button {
+            padding: 10px 20px; /* Increase the padding to make the buttons bigger */
+        }
+
+        .gallery-title {
+            font-weight: bold;
+        }
+
+        .filter-container {
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background-color: #f5f6fa;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .filter-container select {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 20px;
+        }
+
+        .filter-container button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .filter-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .page-number {
+            display: block;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 10px;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <div class="profile">
+                <p id="adminEmail"></p>
+            </div>
+            <ul>
+                <li>
+                    <a href="home.html" class="active">
+                        <span class="icon"><i class="fas fa-home"></i></span>
+                        <span class="item">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="editLeafInfo.html">
+                        <span class="icon"><i class="fas fa-edit"></i></span>
+                        <span class="item">Edit Leaf Information</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="addNewLeaf.html">
+                        <span class="icon"><i class="fas fa-leaf"></i></span>
+                        <span class="item">Add New Leaf</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="leafApproval.html">
+                        <span class="icon"><i class="fas fa-check"></i></span>
+                        <span class="item">Leaf Approval</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="login.html">
+                        <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                        <span class="item">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="section">
+            <div class="header">
+                Welcome to the Leaf Image Retrieval and Recognition System
+            </div>
+
+            <!-- Filter bar -->
+            <div class="filter-container">
+                <label for="filterField">Filter by field:</label>
+                <select id="filterField">
+                    <option value="Description">Description</option>
+                    <option value="Image">Image</option>
+                    <option value="Index">Index</option>
+                    <option value="Species" selected>Species</option>
+                </select>
+                <label for="sortOrder">Sort results:</label>
+                <select id="sortOrder">
+                    <option value="asc" selected>Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+                <button id="applyFilterBtn">Apply Filter</button>
+            </div>
+
+            <div class="gallery-container" id="gallery"></div>
+            <div class="row">
+                <button id="previousBtn">Previous Page</button>
+                <button id="nextBtn">Next Page</button>
+                <span id="pageNumber" class="page-number"></span>
+            </div>
+
+            <script type="module">
+                // Get the admin email from the URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const email = urlParams.get('email');
+              
+                // Display the admin email
+                const adminEmailElement = document.getElementById("adminEmail");
+                adminEmailElement.textContent = `Login: ${email}`;
+              
+                import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+                import { getFirestore, collection, query, limit, orderBy, startAfter, getDocs } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+              
+                const firebaseConfig = {
+                    apiKey: "AIzaSyA1o7j7gG9cji4e8FTAuFwYe4AekFNIoQA",
+                    authDomain: "leaf-rr-system.firebaseapp.com",
+                    projectId: "leaf-rr-system",
+                    storageBucket: "leaf-rr-system.appspot.com",
+                    messagingSenderId: "827493466065",
+                    appId: "1:827493466065:web:1f45770f428aaa39a36af0",
+                    measurementId: "G-Y0ZR58J553"
+                };
+              
+                const app = initializeApp(firebaseConfig);
+                const db = getFirestore();
+              
+                const collectionRef = collection(db, "LeafDatabase");
+                const galleryDiv = document.getElementById("gallery");
+                const pageNumberElement = document.getElementById("pageNumber");
+              
+                const imagesPerPage = 48;
+                let currentPage = 1;
+                let lastVisibleDoc = null;
+              
+                const firstVisibleDocs = []; // Array to store the first document of each page
+              
+                async function fetchImages(filterField, sortOrder, startAtDoc) {
+                  let querySnapshot;
+              
+                  if (startAtDoc) {
+                    querySnapshot = await getDocs(
+                      query(collectionRef, orderBy(filterField, sortOrder), startAfter(startAtDoc), limit(imagesPerPage))
+                    );
+                  } else {
+                    querySnapshot = await getDocs(
+                      query(collectionRef, orderBy(filterField, sortOrder), limit(imagesPerPage))
+                    );
+                  }
+              
+                  lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+                  const firstDoc = querySnapshot.docs[0];
+                  firstVisibleDocs[currentPage] = firstDoc;
+              
+                  return querySnapshot.docs.map((doc) => {
+                    const data = doc.data();
+                    const imgData = data.Image;
+                    const speciesData = data.Species;
+                    const desc = data.Description;
+              
+                    return {
+                      src: `data:image/png;base64,${imgData}`,
+                      w: 0,
+                      h: 0,
+                      title: `<h3><b>${speciesData}</b></h3><br>${desc}`,
+                    };
+                  });
+                }
+              
+                async function loadImages(filterField, sortOrder, startAtDoc) {
+                  const images = await fetchImages(filterField, sortOrder, startAtDoc);
+              
+                  const galleryHTML = images
+                    .map(
+                      (image) =>
+                        `<div class="gallery">
+                           <a href="${image.src}">
+                             <img src="${image.src}" alt="Leaf Image" width="${image.w}" height="${image.h}">
+                           </a>
+                           <div class="gallery-desc">${image.title}</div>
+                         </div>`
+                    )
+                    .join("");
+              
+                  galleryDiv.innerHTML = galleryHTML;
+              
+                  pageNumberElement.textContent = `Page ${currentPage}`;
+                }
+              
+                function nextPage(filterField, sortOrder) {
+                    currentPage++;
+                    loadImages(filterField, sortOrder, lastVisibleDoc);
+
+                    // Scroll to the top of the page
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+                    // Update the page number element
+                    pageNumberElement.textContent = `Page ${currentPage}`;
+
+                    // Enable/disable the previous page button based on the current page
+                    previousBtn.disabled = false;
+                }
+
+              
+                function previousPage(filterField, sortOrder) {
+                  if (currentPage > 1) {
+                    currentPage--;
+              
+                    // Retrieve the first document of the previous page from the array
+                    const firstDocOfPreviousPage = firstVisibleDocs[currentPage];
+                    loadImages(filterField, sortOrder, firstDocOfPreviousPage);
+                  }
+              
+                  // Enable/disable the previous page button based on the current page
+                  previousBtn.disabled = currentPage === 1;
+                }
+              
+                // Apply the filter and sort options when the "Apply Filter" button is clicked
+                const applyFilterBtn = document.getElementById("applyFilterBtn");
+                applyFilterBtn.addEventListener("click", () => {
+                  const filterField = document.getElementById("filterField").value;
+                  const sortOrder = document.getElementById("sortOrder").value;
+                  currentPage = 1; // Reset the current page when applying the filter
+              
+                  loadImages(filterField, sortOrder);
+                  previousBtn.disabled = true; // Disable the previous page button on the first page
+                });
+              
+                // Event listeners for page navigation buttons
+                const previousBtn = document.getElementById("previousBtn");
+                const nextBtn = document.getElementById("nextBtn");
+              
+                previousBtn.addEventListener("click", () => {
+                    const filterField = document.getElementById("filterField").value;
+                    const sortOrder = document.getElementById("sortOrder").value;
+                    previousPage(filterField, sortOrder);
+                });
+                    nextBtn.addEventListener("click", () => {
+                    const filterField = document.getElementById("filterField").value;
+                    const sortOrder = document.getElementById("sortOrder").value;
+                    nextPage(filterField, sortOrder);
+                });
+              
+                // Initial page load
+                loadImages("Species", "asc", currentPage);
+              
+                // Disable the previous page button on the first page
+                previousBtn.disabled = true;
+              </script>              
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.example.leafimageretrievalandrecognitionapplication'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.leafimageretrievalandrecognitionapplication"
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    configurations.all {
+        resolutionStrategy.dependencySubstitution {
+            substitute module('org.hamcrest:hamcrest-core:1.1') with module('junit:junit:4.10')
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
+    implementation 'com.google.firebase:firebase-firestore:24.6.1'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    implementation ('androidx.multidex:multidex:2.0.1') {
+        exclude group: 'org.hamcrest' // Exclude the conflicting Hamcrest library
+    }
+    testImplementation ('junit:junit:4.13.2') {
+        exclude group: 'org.hamcrest' // Exclude the conflicting Hamcrest library
+    }
+}
+
+apply plugin: 'com.google.gms.google-services'

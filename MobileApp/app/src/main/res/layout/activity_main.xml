@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/greenbg"
+    tools:context="com.example.leafimageretrievalandrecognitionapplication.MainActivity">
+
+    <!-- Top background layer -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:src="@drawable/header"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/LeafApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="70dp"
+        android:gravity="center"
+        android:text="Leaf Image Retrieval and Recognition Application"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        android:textStyle="normal|bold"
+        android:textAlignment="viewStart"
+        tools:ignore="RtlCompat" />
+
+    <LinearLayout
+        android:id="@+id/layoutUploadImage"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LeafApp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/uploadicon"
+            android:contentDescription="Upload Image" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Image"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutTakePhoto"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layoutUploadImage"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="Capture Photo"
+            android:src="@drawable/captureicon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Capture Photo"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

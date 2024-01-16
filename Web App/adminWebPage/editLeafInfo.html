@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+        list-style: none;
+        text-decoration: none;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding-top: 60px;
+      overflow: scroll;
+    }
+  
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgb(7, 105, 185);
+      padding: 25px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 24px;
+      color: #ffffff;
+    }
+  
+    .gallery-container {
+      margin: 20px auto;
+      padding: 10px;
+      overflow-y: auto;
+      text-align: center;
+    }
+  
+    div.gallery {
+      margin: 5px;
+      border: 1px solid #ccc;
+      width: 23%;
+      display: inline-block;
+      vertical-align: top;
+      text-align: center;
+    }
+  
+    div.gallery img {
+      width: 100%;
+      height: auto;
+    }
+  
+    div.gallery-desc {
+      margin-top: 5px;
+    }
+  
+    .clearfix::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  
+    .row {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .row button {
+        padding: 10px 20px;
+    }
+
+    .gallery-title {
+      margin-bottom: 2px;
+    }
+  
+    .gallery-species {
+      font-weight: bold;
+      margin-bottom: 26px;
+      font-size: 22px
+    }
+  
+    .gallery-actions {
+      margin-top: 10px;
+    }
+  
+    .gallery-actions button {
+      margin-right: 15px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  
+    /* Overlay styles */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(8, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+  
+    .overlay.show {
+      display: flex;
+    }
+  
+    .overlay-content {
+      width: 400px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+  
+    .filter-container {
+        margin-top: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        background-color: #f5f6fa;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .filter-container select {
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-right: 20px;
+    }
+
+    .filter-container button {
+        padding: 12px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .filter-container button:hover {
+        background-color: #0056b3;
+    }
+
+    #loadingSpinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vmax;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loader::after {
+      content: "";
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 4px solid #ffffff;
+      border-top-color: transparent;
+      animation: spin 1s infinite ease-in-out;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  
+    .page-number {
+      display: block;
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 10px;
+      padding-bottom: 10px;
+    }
+  </style>
+  
+</head>
+<body>
+
+  <div class="header">
+    Edit Leaf Information
+  </div>
+
+  <div id="loadingSpinner" class="loader" style="display: none;"></div>
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+
+
+  <!-- Filter bar -->
+  <div class="filter-container">
+    <label for="filterField">Filter by field:</label>
+    <select id="filterField">
+        <option value="Description">Description</option>
+        <option value="Image">Image</option>
+        <option value="Index">Index</option>
+        <option value="Species" selected>Species</option>
+    </select>
+    <label for="sortOrder">Sort results:</label>
+    <select id="sortOrder">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+    <button id="applyFilterBtn">Apply Filter</button>
+  </div>
+
+  <div class="gallery-container" id="gallery"></div>
+  <div class="row">
+    <button id="previousBtn">Previous Page</button>
+    <button id="nextBtn">Next Page</button>
+    <span id="pageNumber" class="page-number"></span>
+  </div>
+
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getFirestore, collection, query, orderBy, limit, getDocs, startAfter, updateDoc, doc, deleteDoc} from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA1o7j7gG9cji4e8FTAuFwYe4AekFNIoQA",
+      authDomain: "leaf-rr-system.firebaseapp.com",
+      projectId: "leaf-rr-system",
+      storageBucket: "leaf-rr-system.appspot.com",
+      messagingSenderId: "827493466065",
+      appId: "1:827493466065:web:1f45770f428aaa39a36af0",
+      measurementId: "G-Y0ZR58J553"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore();
+
+    const collectionRef = collection(db, "LeafDatabase");
+    const galleryDiv = document.getElementById("gallery");
+    const pageNumberElement = document.getElementById("pageNumber");
+
+    const imagesPerPage = 48;
+    let currentPage = 1;
+    let lastVisibleDoc = null;
+
+    const firstVisibleDocs = []; // Array to store the first document of each page
+
+   async function fetchImages(filterField, sortOrder, startAtDoc) {
+      let querySnapshot;
+  
+      if (startAtDoc) {
+        querySnapshot = await getDocs(
+          query(collectionRef, orderBy(filterField, sortOrder), startAfter(startAtDoc), limit(imagesPerPage))
+        );
+      } else {
+        querySnapshot = await getDocs(
+          query(collectionRef, orderBy(filterField, sortOrder), limit(imagesPerPage))
+        );
+      }
+  
+      lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+      const firstDoc = querySnapshot.docs[0];
+      firstVisibleDocs[currentPage] = firstDoc;
+  
+      return querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        const imgData = data.Image;
+        const speciesData = data.Species;
+        const desc = data.Description;
+        const index = data.Index
+
+        return {
+          docId: doc.id,
+          src: `data:image/png;base64,${imgData}`,
+          w: 400,
+          h: 300,
+          species: speciesData,
+          description: desc,
+          idx: index
+        };
+      });
+    }
+
+    async function loadImages(filterField, sortOrder, startAtDoc) {
+      try{
+        const items = await fetchImages(filterField, sortOrder, startAtDoc);
+
+        // Disable the next page button if totalItems is less than itemsPerPage
+        if (items.length < imagesPerPage) {
+            nextBtn.disabled = true;
+        }
+
+        galleryDiv.innerHTML = '';
+
+        if (items.length === 0) {
+          const noItemsMessage = document.createElement("div");
+          noItemsMessage.textContent = "No Leaves";
+          galleryDiv.appendChild(noItemsMessage);
+          previousBtn.style.display = "none";
+          nextBtn.style.display = "none";
+          pageNumberElement.style.display = "none";
+          return;
+        }
+
+        items.forEach((item) => {
+          const galleryItemDiv = document.createElement("div");
+          galleryItemDiv.classList.add("gallery");
+
+          const imgLink = document.createElement("a");
+          imgLink.href = item.src;
+
+          const img = document.createElement("img");
+          img.classList.add("gallery-image");
+          img.src = item.src;
+
+          imgLink.appendChild(img);
+          galleryItemDiv.appendChild(imgLink);
+
+          const titleDiv = document.createElement("div");
+          titleDiv.classList.add("gallery-title");
+
+          const speciesDiv = document.createElement("div");
+          speciesDiv.classList.add("gallery-species");
+          speciesDiv.innerHTML = item.species;
+
+          const descDiv = document.createElement("div");
+          descDiv.classList.add("gallery-desc");
+          descDiv.innerHTML = item.description;
+
+          titleDiv.appendChild(speciesDiv);
+          titleDiv.appendChild(descDiv);
+              
+          galleryItemDiv.appendChild(titleDiv);
+          
+          const actionContainer = document.createElement("div");
+          actionContainer.classList.add("gallery-actions");
+
+          // Edit Button
+          const editButton = document.createElement("button");
+          editButton.textContent = "Edit";
+          editButton.addEventListener("click", () => {
+
+            // Create input element for species name
+            const speciesInput = document.createElement("input");
+            speciesInput.value = item.species;
+
+            const speciesLabel = document.createElement("label");
+            speciesLabel.textContent = "Enter new species name:";
+            speciesLabel.style.display = "block";
+
+            // Create a div to hold the label and input
+            const speciesContainer = document.createElement("div");
+            speciesContainer.appendChild(speciesLabel);
+            speciesContainer.appendChild(speciesInput);
+
+            // Create textarea element for the description input
+            const descTextarea = document.createElement("textarea");
+            descTextarea.value = item.description;
+            descTextarea.style.width = "300px";
+            descTextarea.style.height = "150px";
+            descTextarea.style.textAlign = "justify";
+
+            const descLabel = document.createElement("label");
+            descLabel.textContent = "Enter new description:";
+            descLabel.style.display = "block";
+
+            // Create a div to hold the label and textarea
+            const descContainer = document.createElement("div");
+            descContainer.appendChild(descLabel);
+            descContainer.appendChild(descTextarea);
+
+            // Create a div to hold the prompt dialog
+            const promptDialog = document.createElement("div");
+            promptDialog.appendChild(speciesContainer);
+            promptDialog.appendChild(descContainer);
+
+            // Create a div for the buttons
+            const buttonContainer = document.createElement("div");
+
+            // Create the OK button
+            const okButton = document.createElement("button");
+            okButton.textContent = "OK";
+            okButton.style.marginRight = "10px";
+            okButton.addEventListener("click", () => {
+              const newSpecies = speciesInput.value;
+              const newDesc = descTextarea.value;
+
+              if (newSpecies !== "" && newDesc !== "") {
+                updateLeafInformation(item.docId, newSpecies, newDesc);
+                item.species = newSpecies
+                item.description = newDesc
+                speciesDiv.innerHTML = item.species;
+                descDiv.innerHTML = item.description;
+                hideLoadingSpinner();
+              }
+              overlay.classList.remove("show");
+              alert("Leaf Info Edited Successfully!")
+            });
+
+            // Create the Cancel button
+            const cancelButton = document.createElement("button");
+            cancelButton.textContent = "Cancel";
+            cancelButton.addEventListener("click", () => {
+              overlay.classList.remove("show");
+            });
+
+            // Add the buttons to the button container
+            buttonContainer.appendChild(okButton);
+            buttonContainer.appendChild(cancelButton);
+
+            // Add the button container to the prompt dialog
+            promptDialog.appendChild(buttonContainer);
+
+            // Create an overlay
+            const overlay = document.createElement("div");
+            overlay.classList.add("overlay");
+
+            // Create the overlay content container
+            const overlayContent = document.createElement("div");
+            overlayContent.classList.add("overlay-content");
+
+            // Add the prompt dialog to the overlay content
+            overlayContent.appendChild(promptDialog);
+
+            // Add the overlay content to the overlay
+            overlay.appendChild(overlayContent);
+
+            // Add the overlay to the document body
+            document.body.appendChild(overlay);
+
+            overlay.classList.add("show");
+          });
+          actionContainer.appendChild(editButton);
+
+          // Delete Button
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.addEventListener("click", () => {
+            const confirmDelete = confirm("Are you sure you want to delete this item?");
+            if (confirmDelete) {
+              showLoadingSpinner();
+              deleteLeafInformation(item.docId);
+              galleryDiv.removeChild(galleryItemDiv);
+              document.body.style.overflow = 'hidden';
+
+              // Send the POST request to deleteLeaf endpoint
+              const formData = new FormData();
+              formData.append("index", item.idx);
+
+              fetch("http://127.0.0.1:5000/delete_leaf", {
+                method: "POST",
+                body: formData,
+              })
+              .then((response) => {
+                if (response.ok) {
+                  alert("Leaf deleted successfully!");
+                  hideLoadingSpinner();
+                  document.body.style.overflow = 'scroll';
+                } else {
+                  throw new Error("Error deleting leaf: " + response.status);
+                }
+              })
+              .catch((error) => {
+                hideLoadingSpinner();
+                alert("Error deleting leaf: " + error.message);
+              });
+            }
+          });
+          actionContainer.appendChild(deleteButton);
+          galleryItemDiv.appendChild(actionContainer);
+
+          galleryDiv.appendChild(galleryItemDiv);
+        });
+
+        // Update page number
+        pageNumberElement.textContent = `Page ${currentPage}`;
+
+        } catch (error) {
+        console.error("Error loading images:", error);
+      }
+    }
+
+    function showLoadingSpinner() {
+      document.getElementById("loadingSpinner").style.display = "flex";
+    }
+
+    function hideLoadingSpinner() {
+      document.getElementById("loadingSpinner").style.display = "none";
+    }
+
+    async function deleteLeafInformation(docId) {
+      const leafDocRef = doc(db, "LeafDatabase", docId);
+      console.log(docId)
+      try {
+        await deleteDoc(leafDocRef);
+        console.log("Leaf information deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting leaf information:", error);
+      }
+    }
+
+    async function updateLeafInformation(docId, newSpecies, newDesc) {
+      const leafDocRef = doc(db, "LeafDatabase", docId);
+
+      try {
+        await updateDoc(leafDocRef, {
+          Species: newSpecies,
+          Description: newDesc,
+        });
+        console.log("Leaf information updated successfully!");
+      } catch (error) {
+        console.error("Error updating leaf information:", error);
+      }
+    }
+
+    function nextPage(filterField, sortOrder) {
+        currentPage++;
+        loadImages(filterField, sortOrder, lastVisibleDoc);
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+        // Update page number
+        pageNumberElement.textContent = `Page ${currentPage}`;
+
+        // Enable/disable the previous page button based on the current page
+        previousBtn.disabled = false;
+    }
+
+    function previousPage(filterField, sortOrder) {
+      if (currentPage > 1) {
+        currentPage--;
+
+        // Retrieve the first document of the previous page from the array
+        const firstDocOfPreviousPage = firstVisibleDocs[currentPage];
+        loadImages(filterField, sortOrder, firstDocOfPreviousPage);
+      }
+
+      // Enable/disable the previous page button based on the current page
+      previousBtn.disabled = currentPage === 1;
+    }
+
+    // Apply the filter and sort options when the "Apply Filter" button is clicked
+    const applyFilterBtn = document.getElementById("applyFilterBtn");
+    applyFilterBtn.addEventListener("click", () => {
+        const filterField = document.getElementById("filterField").value;
+        const sortOrder = document.getElementById("sortOrder").value;
+        currentPage = 1; // Reset the current page when applying the filter
+
+        loadImages(filterField, sortOrder);
+        previousBtn.disabled = true; // Disable the previous page button on the first page
+    });
+
+    const previousBtn = document.getElementById("previousBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    previousBtn.addEventListener("click", () => {
+      const filterField = document.getElementById("filterField").value;
+      const sortOrder = document.getElementById("sortOrder").value;
+      previousPage(filterField, sortOrder);
+    });
+      nextBtn.addEventListener("click", () => {
+      const filterField = document.getElementById("filterField").value;
+      const sortOrder = document.getElementById("sortOrder").value;
+      nextPage(filterField, sortOrder);
+    });
+
+    // Initial page load
+    loadImages("Species", "asc", currentPage);
+
+    // Disable the previous page button on the first page
+    previousBtn.disabled = true;
+
+    var pageHeight = document.documentElement.scrollHeight;
+    var loader = document.querySelector('.loader');
+    loader.style.height = pageHeight + '%';
+
+    window.addEventListener('scroll', updateSpinnerPosition);
+    
+    function updateSpinnerPosition() {
+      var spinner = document.getElementById('loadingSpinner');
+      var windowHeight = window.innerHeight;
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      // Calculate the new top position based on the scroll position and window height
+      var newTop = scrollTop + windowHeight / 2;
+      loadingSpinner.style.top = newTop + 'px';
+    }
+
+  </script>
+</body>
+</html>

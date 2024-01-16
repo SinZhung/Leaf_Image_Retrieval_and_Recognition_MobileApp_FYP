@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Admin Register</h2>
+    <form id="registerForm">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <button type="submit">Register</button>
+      </div>
+      <div id="errorMessage" class="error-message"></div> <!-- Added error message element -->
+    </form>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA1o7j7gG9cji4e8FTAuFwYe4AekFNIoQA",
+      authDomain: "leaf-rr-system.firebaseapp.com",
+      projectId: "leaf-rr-system",
+      storageBucket: "leaf-rr-system.appspot.com",
+      messagingSenderId: "827493466065",
+      appId: "1:827493466065:web:1f45770f428aaa39a36af0",
+      measurementId: "G-Y0ZR58J553"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    function register(email, password) {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Registration successful
+          const user = userCredential.user;
+          console.log("User registered:", user);
+    
+          // Clear the form
+          registerForm.reset();
+          alert("Account Registered Successfully")
+
+          // Redirect to login.html
+          window.location.href = "login.html";
+        })
+        .catch((error) => {
+          // Handle registration errors
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.error("Registration error:", errorCode, errorMessage);
+          // Display error message
+          const errorMessageElement = document.getElementById("errorMessage");
+          if (errorCode === "auth/weak-password") {
+            errorMessageElement.textContent = "Password should be at least 6 characters.";
+          } else if (errorCode === "auth/email-already-in-use") {
+            errorMessageElement.textContent = "Email is already in use.";
+          } else {
+            errorMessageElement.textContent = "Registration failed. Please try again.";
+          }
+        });
+    }
+
+    const registerForm = document.getElementById("registerForm");
+    registerForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const email = registerForm.email.value;
+      const password = registerForm.password.value;
+      register(email, password);
+    });
+  </script>
+</body>
+</html>
